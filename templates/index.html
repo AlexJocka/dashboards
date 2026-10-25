@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Просмотр Excel-отчётов</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, -apple-system, Segoe UI, sans-serif; color: #243247; background: #f5f7fa; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { max-width: 960px; margin: 42px auto; padding: 0 20px 50px; }
+    h1 { font-size: 2rem; margin-bottom: 8px; }
+    h2 { font-size: 1.25rem; margin: 0 0 10px; }
+    p { line-height: 1.5; }
+    .muted { color: #5a687a; }
+    .card { background: white; border: 1px solid #dce3eb; border-radius: 14px; padding: 24px; margin: 18px 0; box-shadow: 0 3px 16px #24324709; }
+    form { display: grid; gap: 16px; }
+    label { display: block; font-weight: 600; margin-bottom: 7px; }
+    input, select { width: 100%; padding: 12px; border: 1px solid #aebaca; border-radius: 8px; background: white; font: inherit; }
+    button { justify-self: start; background: #245e9a; color: white; border: 0; border-radius: 8px; padding: 12px 20px; font: inherit; font-weight: 600; cursor: pointer; }
+    button:hover { background: #194b7d; }
+    .notice { padding: 12px 15px; border-radius: 8px; background: #fff3d5; color: #614609; margin: 12px 0; }
+    .error { background: #fde8e8; color: #842222; }
+    .tag { display: inline-block; background: #e7f0fa; padding: 5px 9px; border-radius: 7px; font-weight: 600; }
+    ul { margin-bottom: 0; padding-left: 22px; }
+    li { margin: 5px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Просмотр Excel-отчётов</h1>
+  <p class="muted">Черновая локальная версия. После загрузки распознанного отчёта откроется страница дашбордов.</p>
+  <section class="card">
+    <form method="post" enctype="multipart/form-data">
+      <div><label for="files">Excel-файлы</label><input id="files" name="files" type="file" accept=".xlsx" multiple required><small class="muted">До 20 файлов по 10 МБ. Поддерживается .xlsx.</small></div>
+      <div><label for="form_type">Тип формы</label><select id="form_type" name="form_type"><option value="">Определить автоматически</option>{% for profile in profiles %}<option value="{{ profile.code }}">{{ profile.code }} — {{ profile.title }}</option>{% endfor %}</select><small class="muted">Выберите вручную, если автоматическое определение не сработало.</small></div>
+      <button type="submit">Проанализировать</button>
+    </form>
+  </section>
+  {% if page_error %}<div class="notice error" role="alert">{{ page_error }}</div>{% endif %}
+  {% for result in results %}
+    <section class="card">
+      <h2>{{ result.filename }}</h2>
+      {% if result.error %}
+        <div class="notice error" role="alert">{{ result.error }}</div>
+      {% else %}
+        {% if result.profile %}<p><span class="tag">{{ result.profile.code }}</span> {{ result.profile.title }}{% if result.automatic %} · определено автоматически{% else %} · выбрано вручную{% endif %}</p>{% else %}<p>Форма пока не определена.</p>{% endif %}
+        <p><strong>Листы:</strong></p>
+        <ul>{% for sheet in result.sheets %}<li>{{ sheet.name }} — {{ sheet.rows }} строк, {{ sheet.columns }} столбцов</li>{% endfor %}</ul>
+        {% for warning in result.warnings %}<div class="notice">{{ warning }}</div>{% endfor %}
+      {% endif %}
+    </section>
+  {% endfor %}
+</main>
+</body>
+</html>
