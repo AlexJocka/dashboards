@@ -1,0 +1,99 @@
+/* ЭКРАН 04 · КАЧЕСТВО ДАННЫХ. */
+
+/* ЭТАПЫ ЗАГРУЗКИ: белая полоса, четыре шага в ряд. */
+.import-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-24);
+  padding: var(--space-24);
+  background: var(--odk-surface);
+}
+
+.import-steps li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-12);
+  font: var(--text-body);
+}
+
+.import-steps__number {
+  font: var(--text-label);
+}
+
+.import-steps li[aria-current="step"] {
+  font: var(--text-label);
+  color: var(--odk-accent-ink);
+}
+
+/* РЕЗУЛЬТАТ ПРОВЕРКИ: описание слева, столбец действий справа. */
+.validation-result {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-24);
+}
+
+.validation-result__description {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.validation-result__actions {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  width: 248px;
+}
+
+/* СОСТОЯНИЯ ДАННЫХ И ИСТОРИЯ. */
+.quality-states {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-32);
+}
+
+.quality-states__column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-8);
+}
+
+.quality-states__column h2 {
+  margin-bottom: var(--space-8);
+}
+
+.quality-states .status {
+  width: 300px;
+  max-width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .import-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .validation-result {
+    flex-direction: column;
+  }
+
+  .validation-result__actions {
+    width: 100%;
+  }
+
+  .quality-states {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .import-steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-12);
+    padding: var(--space-16);
+  }
+}

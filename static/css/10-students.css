@@ -1,0 +1,73 @@
+/* ЭКРАН 03 · ЦЕЛЕВЫЕ СТУДЕНТЫ. */
+
+/* ПОИСК И ПОДСКАЗКА О ДОСТУПЕ К ФИО. */
+.student-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-12) var(--space-24);
+}
+
+.student-toolbar label {
+  display: block;
+  width: 300px;
+  max-width: 100%;
+}
+
+.student-toolbar__note {
+  font: var(--text-caption);
+  color: var(--odk-muted);
+}
+
+/* КАРТОЧКА СТУДЕНТА: вкладки и три поля в ряд. */
+.student-card .tabs {
+  margin-bottom: var(--space-24);
+}
+
+.student-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-24);
+}
+
+.student-fields__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.student-fields dt {
+  font: var(--text-caption);
+  color: var(--odk-muted);
+}
+
+.student-fields dd {
+  font: var(--text-subheading);
+}
+
+.student-fields dd.student-fields__note {
+  font: var(--text-caption);
+  color: var(--odk-muted);
+}
+
+.student-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  max-width: 720px;
+}
+
+@media (max-width: 600px) {
+  .student-toolbar label {
+    width: 100%;
+  }
+
+  .student-card .tab {
+    flex: 1 1 40%;
+    min-width: 0;
+  }
+
+  .student-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -56,10 +56,10 @@ class DraftTests(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.location, "/dashboards")
 
-    def test_dashboards_placeholder(self):
+    def test_dashboards_without_report_offers_demo(self):
         response = app.test_client().get("/dashboards")
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Страница пока находится на стадии разработки".encode(), response.data)
+        self.assertIn("Открыть демо-дашборд".encode(), response.data)
 
     def test_bad_file_is_reported(self):
         client = app.test_client()
