@@ -7,6 +7,7 @@ from numbers import Real
 from openpyxl import load_workbook
 
 from detector import PROFILE_BY_CODE, detect, normalize
+from student_report import student_report
 
 
 def _display(value: object) -> str:
@@ -57,6 +58,8 @@ def analyze_file(filename: str, content: bytes, selected_code: str = "") -> dict
         header_cells = []
         previews = []
         for sheet in workbook.worksheets:
+            if sheet.max_row is None or sheet.max_column is None:
+                sheet.calculate_dimension(force=True)
             rows = list(sheet.iter_rows(min_row=1, max_row=min(sheet.max_row, 10), max_col=min(sheet.max_column, 35), values_only=True))
             header_cells.extend(value for row in rows for value in row)
             previews.append({
@@ -77,12 +80,17 @@ def analyze_file(filename: str, content: bytes, selected_code: str = "") -> dict
             "sheets": previews,
             "chart": None,
             "warnings": [],
+            "students": None,
+            "demo": any("демо" in normalize(sheet.cell(1, 1).value).split() for sheet in workbook.worksheets),
         }
         if profile and profile.code == "F01":
             labels, values, warnings = _f01_chart(workbook)
             result["warnings"].extend(warnings)
             if labels:
                 result["chart"] = {"labels": labels, "values": values}
+        elif profile and profile.code == "F02A":
+            result["students"], warnings = student_report(workbook)
+            result["warnings"].extend(warnings)
         elif profile:
             result["warnings"].append("Для этой формы график пока не реализован; показаны сведения о файле.")
         else:

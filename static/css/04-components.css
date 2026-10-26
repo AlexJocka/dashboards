@@ -1,0 +1,298 @@
+/* КОМПОНЕНТЫ: соответствуют ODK / Button, Status, Metric, Data row и общим блокам экранов. */
+
+/* КНОПКА (ODK / Button). По умолчанию - Secondary, модификатор --primary - главное действие. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-height);
+  padding: 0 var(--space-24);
+  font: var(--text-label);
+  color: var(--odk-ink);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  background: var(--odk-surface);
+  border: 1px solid var(--odk-line);
+  border-radius: var(--radius-4);
+  cursor: pointer;
+}
+
+.button:hover {
+  border-color: var(--odk-muted);
+}
+
+.button--primary {
+  color: var(--odk-accent-ink);
+  background: var(--odk-accent);
+  border-color: var(--odk-accent);
+}
+
+.button--primary:hover {
+  background: var(--odk-accent-hover);
+  border-color: var(--odk-accent-hover);
+}
+
+.button:disabled,
+.button[aria-disabled="true"] {
+  color: var(--odk-muted);
+  background: var(--odk-canvas);
+  border-color: var(--odk-canvas);
+  cursor: not-allowed;
+}
+
+.button--wide {
+  width: 100%;
+}
+
+/* ФИЛЬТРЫ: ряд выпадающих списков и кнопок. */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.filters label {
+  display: block;
+}
+
+/* ВЫПАДАЮЩИЙ СПИСОК выглядит как Secondary-кнопка со стрелкой. */
+.filter-select {
+  min-width: 140px;
+  height: var(--control-height);
+  padding: 0 var(--space-32) 0 var(--space-16);
+  font: var(--text-label);
+  color: var(--odk-ink);
+  background: var(--odk-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%2342424d' d='M0 0h10L5 6z'/%3E%3C/svg%3E") no-repeat right var(--space-16) center;
+  border: 1px solid var(--odk-line);
+  border-radius: var(--radius-4);
+  appearance: none;
+  cursor: pointer;
+}
+
+.filter-select:hover {
+  border-color: var(--odk-muted);
+}
+
+.filter-select--organization {
+  min-width: 172px;
+}
+
+.filter-select--year,
+.filter-select--status {
+  min-width: 152px;
+}
+
+/* ПОЛЕ ПОИСКА. */
+.search-input {
+  width: 100%;
+  height: var(--control-height);
+  padding: 0 var(--space-16);
+  font: var(--text-body);
+  color: var(--odk-ink);
+  background: var(--odk-surface);
+  border: 1px solid var(--odk-line);
+  border-radius: var(--radius-4);
+}
+
+.search-input::placeholder {
+  color: var(--odk-muted);
+}
+
+.search-input:hover {
+  border-color: var(--odk-muted);
+}
+
+/* ВКЛАДКИ: выбранная - как Primary, остальные - как Secondary. */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+}
+
+.tab {
+  min-width: 140px;
+}
+
+.tab[aria-selected="true"] {
+  color: var(--odk-accent-ink);
+  background: var(--odk-accent);
+  border-color: var(--odk-accent);
+}
+
+/* КЛЮЧЕВЫЕ ПОКАЗАТЕЛИ (ODK / Metric): четыре карточки в ряд. */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-16);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-24);
+  background: var(--odk-surface);
+}
+
+.metric__label {
+  font: var(--text-body);
+  color: var(--odk-muted);
+}
+
+.metric__value {
+  font: var(--text-number);
+  font-variant-numeric: tabular-nums;
+}
+
+.metric__note {
+  font: var(--text-caption);
+  color: var(--odk-muted);
+}
+
+/* ПАНЕЛЬ: белый блок с отступом 24 px. */
+.panel {
+  padding: var(--space-24);
+  background: var(--odk-surface);
+}
+
+.panel--tint {
+  background: var(--odk-tint);
+}
+
+.panel-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-16);
+  margin-bottom: var(--space-24);
+}
+
+.panel-heading__meta {
+  font: var(--text-caption);
+  color: var(--odk-muted);
+}
+
+/* ТАБЛИЦА (ODK / Data row): заголовки на фоне страницы, строки белые высотой 56 px.
+   Первый и последний столбцы - по левому краю, числовые середины - по правому. */
+.table-scroll {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  min-width: 880px;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table col:nth-child(1) {
+  width: 28%;
+}
+
+.data-table col:nth-child(6) {
+  width: 20%;
+}
+
+.data-table th {
+  padding: var(--space-12) var(--space-16);
+  font: var(--text-caption);
+  color: var(--odk-muted);
+  text-align: right;
+  vertical-align: bottom;
+}
+
+.data-table td {
+  height: var(--row-height);
+  padding: 0 var(--space-16);
+  text-align: right;
+  background: var(--odk-surface);
+}
+
+.data-table th:first-child,
+.data-table td:first-child,
+.data-table th:last-child,
+.data-table td:last-child {
+  text-align: left;
+}
+
+.data-table tbody tr:hover td {
+  background: var(--odk-tint);
+}
+
+/* ТЕКСТОВОЕ ДЕЙСТВИЕ: ссылка или кнопка внутри таблицы. */
+.text-action {
+  padding: 0;
+  font: var(--text-label);
+  color: var(--odk-accent-ink);
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-color: var(--odk-accent);
+  text-underline-offset: 3px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.text-action:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* СТАТУС (ODK / Status). Без модификатора - Neutral. */
+.status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: var(--space-4) var(--space-12);
+  font: var(--text-caption);
+  color: var(--odk-muted);
+  background: var(--odk-canvas);
+  border-radius: var(--radius-4);
+}
+
+.status--good {
+  color: var(--odk-good);
+  background: var(--odk-goodBg);
+}
+
+.status--warning {
+  color: var(--odk-warn);
+  background: var(--odk-warnBg);
+}
+
+.status--danger {
+  color: var(--odk-danger);
+  background: var(--odk-dangerBg);
+}
+
+/* АДАПТИВ: показатели по две и по одной карточке. */
+@media (max-width: 1024px) {
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .metric {
+    padding: var(--space-16);
+  }
+
+  .filters > label,
+  .filter-select {
+    width: 100%;
+  }
+
+  .filters > .button {
+    width: 100%;
+  }
+
+  .panel {
+    padding: var(--space-16);
+  }
+}

@@ -1,0 +1,84 @@
+/* ДИЗАЙН-ТОКЕНЫ ОДК «КОНТУР РАЗВИТИЯ».
+   Имена совпадают с переменными Figma (Dev Mode → CSS):
+   коллекции ODK / Primitives и ODK / Interface, текстовые стили ODK / *. */
+
+/* ВРЕМЕННЫЙ ШРИФТ: Jost вместо фирменного Stolzl, пока шрифт не получен от заказчика.
+   Когда появятся файлы Stolzl - подключить через @font-face и удалить этот импорт. */
+/* Шрифты используются локально; при отсутствии Stolzl/Jost - Calibri/Arial. */
+
+:root {
+  /* ПАЛИТРА ОДК (Primitives). В интерфейсе используйте семантические токены ниже. */
+  --odk-palette-white: #ffffff;
+  --odk-palette-aluminium: #e6e6eb;
+  --odk-palette-aluminium-dark: #d2d2da;
+  --odk-palette-anthracite: #42424d;
+  --odk-palette-anthracite-70: #62626c;
+  --odk-palette-midnight: #202945;
+  --odk-palette-midnight-active: #2e3a5c;
+  --odk-palette-midnight-muted: #a7adbf;
+  --odk-palette-blue: #42aaff;
+  --odk-palette-blue-hover: #1f8fea;
+  --odk-palette-blue-10: #e3f2ff;
+  --odk-palette-persian-red: #c83232;
+  --odk-palette-persian-red-10: #f9e7e7;
+  --odk-palette-good: #28634f;
+  --odk-palette-goodBg: #eaf3ee;
+  --odk-palette-warn: #8a5b19;
+  --odk-palette-warnBg: #faf1df;
+
+  /* ЦВЕТА ИНТЕРФЕЙСА (Interface). */
+  --odk-canvas: var(--odk-palette-aluminium);        /* фон страницы */
+  --odk-surface: var(--odk-palette-white);           /* карточки, таблицы, шапка */
+  --odk-ink: var(--odk-palette-anthracite);          /* основной текст */
+  --odk-muted: var(--odk-palette-anthracite-70);     /* вторичный текст */
+  --odk-line: var(--odk-palette-aluminium-dark);     /* разделители и рамки */
+  --odk-accent: var(--odk-palette-blue);             /* кнопки, активные элементы, графики */
+  --odk-accent-hover: var(--odk-palette-blue-hover);
+  --odk-accent-ink: var(--odk-palette-midnight);     /* текст на голубом и текстовые акценты */
+  --odk-tint: var(--odk-palette-blue-10);            /* светлая голубая подложка */
+  --odk-dark: var(--odk-palette-midnight);           /* тёмные плашки */
+  --odk-nav: var(--odk-palette-midnight);            /* боковое меню */
+  --odk-nav-active: var(--odk-palette-midnight-active);
+  --odk-on-dark: var(--odk-palette-white);
+  --odk-on-dark-muted: var(--odk-palette-midnight-muted);
+  --odk-good: var(--odk-palette-good);
+  --odk-goodBg: var(--odk-palette-goodBg);
+  --odk-warn: var(--odk-palette-warn);
+  --odk-warnBg: var(--odk-palette-warnBg);
+  --odk-danger: var(--odk-palette-persian-red);      /* только логотип и критичные состояния */
+  --odk-dangerBg: var(--odk-palette-persian-red-10);
+
+  /* ОТСТУПЫ (space/*). --space-20 в Figma пока задан числом, а не переменной. */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+
+  /* СКРУГЛЕНИЯ (radius/*). */
+  --radius-0: 0;
+  --radius-4: 4px;
+  --radius-8: 8px;
+
+  /* ТИПОГРАФИКА (стили ODK / *). Stolzl Light / Book / Medium → Jost 300 / 400 / 500. */
+  --font-family: "Stolzl", "Jost", Calibri, Arial, sans-serif;
+  --font-light: 300;
+  --font-regular: 400;
+  --font-medium: 500;
+
+  --text-caption: var(--font-light) 12px/16px var(--font-family);
+  --text-body: var(--font-regular) 14px/20px var(--font-family);
+  --text-label: var(--font-medium) 14px/20px var(--font-family);
+  --text-subheading: var(--font-medium) 20px/28px var(--font-family);
+  --text-heading: var(--font-medium) 32px/40px var(--font-family);
+  --text-number: var(--font-medium) 40px/48px var(--font-family);
+
+  /* РАЗМЕРЫ КАРКАСА (из фреймов Figma 1600 px). */
+  --header-height: 80px;
+  --sidebar-width: 240px;
+  --control-height: 40px;
+  --row-height: 56px;
+}

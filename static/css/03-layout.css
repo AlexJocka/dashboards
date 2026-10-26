@@ -1,0 +1,205 @@
+/* КАРКАС: шапка, боковое меню, рабочая область. Общий для всех экранов. */
+
+/* ШАПКА: белая, логотип слева, роль пользователя справа. */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+  min-height: var(--header-height);
+  padding: 0 var(--space-32);
+  background: var(--odk-surface);
+}
+
+.brand {
+  flex: none;
+  display: block;
+  text-decoration: none;
+}
+
+.brand__image {
+  width: 132px;
+  height: 58px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.system-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.system-name__title {
+  font: var(--text-label);
+  text-transform: uppercase;
+}
+
+.system-name__subtitle {
+  font: var(--text-caption);
+  color: var(--odk-muted);
+}
+
+.user-role {
+  flex: none;
+  font: var(--text-body);
+  color: var(--odk-muted);
+}
+
+/* ТЕЛО: меню фиксированной ширины + содержимое. */
+.app-body {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  min-height: calc(100vh - var(--header-height));
+}
+
+/* БОКОВОЕ МЕНЮ: полуночный экспресс. */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-24) var(--space-8);
+  color: var(--odk-on-dark);
+  background: var(--odk-nav);
+}
+
+.sidebar__caption,
+.source-list__title {
+  padding: 0 var(--space-12);
+  font: var(--text-caption);
+  text-transform: uppercase;
+  color: var(--odk-on-dark-muted);
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  min-height: var(--control-height);
+  padding: var(--space-12);
+  font: var(--text-label);
+  color: var(--odk-on-dark);
+  text-decoration: none;
+  border-radius: var(--radius-4);
+}
+
+.nav-link__index {
+  font: var(--text-caption);
+  color: var(--odk-on-dark-muted);
+}
+
+.nav-link:hover,
+.nav-link[aria-current="page"] {
+  background: var(--odk-nav-active);
+}
+
+.nav-link[aria-current="page"] .nav-link__index {
+  color: var(--odk-accent);
+}
+
+.source-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding-top: var(--space-16);
+  border-top: 1px solid var(--odk-nav-active);
+}
+
+.source-list ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: 0 var(--space-12);
+}
+
+.source-list li {
+  font: var(--text-body);
+}
+
+.source-list__note {
+  padding: 0 var(--space-12);
+  font: var(--text-caption);
+  color: var(--odk-on-dark-muted);
+}
+
+/* РАБОЧАЯ ОБЛАСТЬ: секции идут столбцом с шагом 24 px. */
+.page-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  min-width: 0;
+  padding: var(--space-32);
+}
+
+.page-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.page-heading__subtitle {
+  color: var(--odk-muted);
+}
+
+/* Заголовок раздела перед таблицей отделяем от предыдущего блока сильнее. */
+.page-content > h2 {
+  margin-top: var(--space-8);
+}
+
+/* ПЛАНШЕТ: меню становится горизонтальной полосой над содержимым. */
+@media (max-width: 1024px) {
+  .app-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    padding: var(--space-12) var(--space-16);
+  }
+
+  .sidebar__caption,
+  .source-list {
+    display: none;
+  }
+
+  .nav-list {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .nav-link {
+    flex: none;
+    white-space: nowrap;
+  }
+}
+
+/* ТЕЛЕФОН: компактная шапка и поля 16 px. */
+@media (max-width: 600px) {
+  .app-header {
+    flex-wrap: wrap;
+    gap: var(--space-8) var(--space-16);
+    padding: var(--space-12) var(--space-16);
+  }
+
+  .brand__image {
+    width: 96px;
+    height: 42px;
+  }
+
+  .user-role {
+    width: 100%;
+    font: var(--text-caption);
+  }
+
+  .page-content {
+    padding: var(--space-24) var(--space-16);
+  }
+
+  h1 {
+    font-size: 26px;
+    line-height: 32px;
+  }
+}

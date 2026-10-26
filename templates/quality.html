@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Качество данных · ОДК - Контур развития{% endblock %}
+{% block content %}
+<header class="page-heading"><p class="eyebrow">04 / КОНТУР РАЗВИТИЯ</p><h1>Качество исходных данных</h1><p class="page-heading__subtitle">Результаты распознавания и замечания при чтении загруженных Excel-файлов.</p></header>
+<div class="page-actions"><a class="button button--primary" href="{{ url_for('index') }}">Выбрать XLSX</a><a class="button" href="{{ url_for('summary') }}">К сводке</a></div>
+{% for r in reports %}
+<section class="panel"><header class="panel-heading"><div><h2>{{ r.filename }}</h2><p class="panel-heading__meta">{{ r.code }} · {{ r.title }}</p></div><span class="status {{ 'status--warning' if r.warnings else 'status--good' }}">{{ 'Есть замечания' if r.warnings else 'Нет замечаний чтения' }}</span></header>
+<div class="table-scroll" tabindex="0"><table class="data-table report-table"><thead><tr><th scope="col">Лист</th><th scope="col">Строк на листе</th><th scope="col">Столбцов</th><th scope="col">Источник</th></tr></thead><tbody>{% for sheet in r.sheets %}<tr><td>{{ sheet.name }}</td><td>{{ sheet.rows }}</td><td>{{ sheet.columns }}</td><td>{{ 'Демонстрационный файл' if r.demo else 'Загруженный файл' }}</td></tr>{% endfor %}</tbody></table></div>
+{% for warning in r.warnings %}<p class="notice">{{ warning }}</p>{% endfor %}
+{% if r.students %}{% set records = r.students.records %}<p class="caption muted quality-note">Извлечено строк отчёта: {{ records | length }}. Справочный блок исключён. Размер листа выше включает шапку и справочники.</p>{% endif %}
+</section>
+{% else %}<section class="panel"><h2>Пока нет загруженных отчётов</h2><p class="muted quality-note">Загрузите Excel, чтобы увидеть результат обработки.</p></section>{% endfor %}
+<section class="panel quality-states"><div class="quality-states__column"><h2>Как читать показатели</h2><span class="status status--good">0: заполненный ноль</span><span class="status">Нет значения: ячейка не заполнена</span><span class="status status--warning">Замечание: нужна проверка</span></div><div class="quality-states__column"><h2>Границы проверки</h2><p class="muted">Проверяем распознавание формы и чтение значений. Отсутствие замечаний не подтверждает полноту отчёта. Сравнение версий и история загрузок в этой версии не реализованы.</p></div></section>
+{% endblock %}
