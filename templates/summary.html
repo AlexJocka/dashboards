@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Сводка · ОДК - Контур развития{% endblock %}
+{% block content %}
+<header class="page-heading"><p class="eyebrow">01 / КОНТУР РАЗВИТИЯ</p><h1>Обучение и кадровый потенциал</h1><p class="page-heading__subtitle">Обзор текущей загрузки. Каждый отчёт открывается и рассчитывается отдельно.</p></header>
+<section class="metrics" aria-label="Ключевые показатели загрузки">
+  <article class="metric"><h2 class="metric__label">Загружено отчётов</h2><p class="metric__value">{{ reports | length }}</p><p class="metric__note">В текущем наборе</p></article>
+  <article class="metric"><h2 class="metric__label">Целевые студенты</h2><p class="metric__value">{{ reports | selectattr('code','equalto','F02A') | list | length }}</p><p class="metric__note">Отчётов сводной формы F02A</p></article>
+  <article class="metric"><h2 class="metric__label">Обучение ШПМ</h2><p class="metric__value">{{ reports | selectattr('code','equalto','F01') | list | length }}</p><p class="metric__note">Отчётов формы F01</p></article>
+  <article class="metric"><h2 class="metric__label">Замечания чтения</h2><p class="metric__value">{{ warning_count }}</p><p class="metric__note">По результатам обработки</p></article>
+</section>
+<div class="summary-analytics">
+  <section class="panel"><header class="panel-heading"><h2>Состав загрузки</h2><p class="panel-heading__meta">файлы по формам</p></header>
+  {% for group in reports | groupby('title') %}<div class="program-row"><span class="program-row__label" id="profile-{{ loop.index }}">{{ group.grouper }}</span><progress class="program-progress" value="{{ group.list | length }}" max="{{ reports | length }}" aria-labelledby="profile-{{ loop.index }}">{{ group.list | length }}</progress><span class="program-row__value">{{ group.list | length }}</span></div>{% else %}<p class="muted">Отчёты ещё не загружены.</p>{% endfor %}
+  </section>
+  <aside class="report-attention"><p class="report-attention__label">КОНТРОЛЬ ИСТОЧНИКОВ</p><p class="report-attention__value">{{ warning_count }}</p><h2>замечаний обработки</h2><p class="report-attention__details">Проверяйте заполненность исходных данных перед использованием показателей.</p><a class="button report-attention__link" href="{{ url_for('quality') }}">Открыть качество данных</a></aside>
+</div>
+<h2>Отчёты текущей загрузки</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Список отчётов"><table class="data-table report-table"><thead><tr><th scope="col">Файл / направление</th><th scope="col">Форма</th><th scope="col">Листы</th><th scope="col">Данные</th><th scope="col">Действие</th></tr></thead><tbody>
+{% for r in reports %}<tr><td>{{ r.filename }}<small class="muted">{{ r.title }}{% if r.demo %} · ДЕМО{% endif %}</small></td><td>{{ r.code }}</td><td>{{ r.sheets | length }}</td><td>{{ 'Есть замечания' if r.warnings else 'Прочитаны' }}</td><td><a class="text-action" href="{{ url_for('training' if r.code == 'F01' else 'dashboards', file=r.filename) }}">Открыть</a></td></tr>{% else %}<tr><td colspan="5">Загрузите Excel или откройте демонстрационный отчёт.</td></tr>{% endfor %}
+</tbody></table></div>
+<div class="page-actions"><a class="button button--primary" href="{{ url_for('index') }}">Загрузить XLSX</a><form method="post" action="{{ url_for('demo') }}"><button class="button" type="submit">Открыть демо-дашборд →</button></form></div>
+{% endblock %}

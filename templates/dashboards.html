@@ -1,25 +1,39 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Дашборды — в разработке</title>
-  <style>
-    :root { font-family: system-ui, -apple-system, Segoe UI, sans-serif; color: #243247; background: #f5f7fa; }
-    * { box-sizing: border-box; }
-    body { margin: 0; }
-    main { max-width: 720px; margin: 12vh auto; padding: 0 20px; }
-    .card { background: white; border: 1px solid #dce3eb; border-radius: 14px; padding: 32px; box-shadow: 0 3px 16px #24324709; }
-    h1 { margin-top: 0; }
-    p { line-height: 1.5; color: #5a687a; }
-    a { color: #245e9a; font-weight: 600; }
-  </style>
-</head>
-<body>
-  <main><section class="card">
-    <h1>Дашборды</h1>
-    <p>Страница пока находится на стадии разработки.</p>
-    <a href="{{ url_for('index') }}">Вернуться к загрузке файлов</a>
-  </section></main>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}{{ 'Обучение' if active == 'training' else 'Целевые студенты' }} · ОДК - Контур развития{% endblock %}
+{% block scripts %}<script src="{{ url_for('static',filename='dashboard.js') }}" defer></script>{% endblock %}
+{% block content %}
+
+<header class="page-heading"><p class="eyebrow">{{ '02' if active == 'training' else '03' }} / КОНТУР РАЗВИТИЯ</p><h1 id="page-title">{{ 'Обучение' if active == 'training' else 'Целевые студенты и треки' }}</h1><p class="page-heading__subtitle">{{ 'Фактически обученные по месяцам из отчётов ШПМ.' if active == 'training' else 'План приёма, договоры и контингент. Сводные показатели из Excel.' }}</p><span class="status form-tag" id="form-tag">{{ 'F01 · Школа мастера' if active == 'training' else 'F02A · Сводная форма' }}</span></header>
+      {% if reports %}
+      <section class="source-panel" aria-label="Источник данных">
+        <div class="file-icon">X</div><div class="source-info"><span class="mini-label">ИСТОЧНИК ДАННЫХ</span><label class="visually-hidden" for="report-select">Отчёт</label><select id="report-select">{% for report in reports %}<option value="{{ loop.index0 }}">{{ report.filename }}</option>{% endfor %}</select></div>
+        <span class="demo-tag" id="demo-tag" hidden>Демо · случайные данные</span>
+      </section>
+      <div id="warnings" role="status"></div>
+      <section class="filters" id="filters" aria-label="Фильтры отчёта">
+        <div class="filter-caption">Срез данных</div>
+        <label>Год начала обучения<select id="year-filter" class="filter-select"><option value="">Все годы</option></select></label>
+        <label>Образовательная организация<select id="university-filter" class="filter-select"><option value="">Все организации</option></select></label>
+        <label>Программа<select id="program-filter" class="filter-select"><option value="">Все программы</option></select></label>
+        <button id="reset-filters" class="text-action" type="button">Сбросить</button>
+      </section>
+      <div id="student-content" class="student-content">
+        <section class="metrics" aria-label="Основные показатели" id="kpis"></section>
+        <div class="charts-grid">
+          <section class="panel comparison"><div class="panel-heading"><div><h2>План и заключённые договоры</h2><p>По образовательным организациям, человек</p></div><span class="mini-chip" id="university-count"></span></div><div class="legend"><span><i style="--color:#d2d2da"></i>План приёма</span><span><i style="--color:#42aaff"></i>Договоры</span></div><div id="comparison-chart" class="comparison-chart"></div></section>
+          <section class="panel status-panel"><div class="panel-heading"><div><h2>Статусы студентов</h2><p>Из заключённых целевых договоров</p></div></div><div id="status-chart"></div></section>
+        </div>
+        <div class="student-toolbar"><label><span class="visually-hidden">Поиск по вузу или программе</span><input type="search" id="student-search" class="search-input" placeholder="Поиск по вузу / программе" autocomplete="off"></label><p class="student-toolbar__note">Сводные строки отчёта F02A</p></div><section class="panel detail-panel"><div class="panel-heading"><div><h2>Детализация отчёта <span class="count" id="row-count"></span></h2><p>Показатели с учётом выбранных фильтров</p></div><button class="button small" type="button" id="export-csv">↓ Скачать CSV</button></div><div class="table-scroll"><table class="data-table"><thead><tr><th scope="col">Организация / программа</th><th scope="col">Год</th><th scope="col">План</th><th scope="col">Квоты</th><th scope="col">Договоры</th><th scope="col">Обучаются</th><th scope="col">Трудоустроены</th><th scope="col">Расторгнуты</th></tr></thead><tbody id="detail-body"></tbody></table></div></section>
+      </div>
+      <section id="other-content" class="panel" hidden></section>
+      <footer>Пустые значения обозначены «-» и не заменяются нулями. <a href="{{ url_for('download_demo') }}">Скачать демо Excel</a></footer>
+      {% else %}
+      {% if active == 'training' %}
+      <section class="panel welcome"><h2>Нет загруженных отчётов обучения</h2><p>Загрузите отчёт ШПМ формы F01, чтобы увидеть фактически обученных по месяцам.</p><div class="welcome-actions"><a class="button button--primary" href="{{ url_for('index') }}">Загрузить отчёт F01</a></div></section>
+      {% else %}
+      <section class="panel welcome"><div class="welcome-icon">▥</div><h2>Откройте первый дашборд</h2><p>Загрузите Excel-отчёт или посмотрите пример<br>на копии таблицы со случайными данными.</p><div class="welcome-actions"><form action="{{ url_for('demo') }}" method="post"><button class="button button--primary" type="submit">Открыть демо-дашборд →</button></form><a class="button" href="{{ url_for('index') }}">Загрузить свой файл</a></div><a class="text-action" href="{{ url_for('download_demo') }}">Скачать демонстрационный Excel</a></section>
+      {% endif %}
+      {% endif %}
+
+{% endblock %}
+{% block data %}<script type="application/json" id="report-data">{{ reports | tojson }}</script>{% endblock %}

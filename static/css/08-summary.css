@@ -1,0 +1,95 @@
+/* ЭКРАН 01 · СВОДКА. */
+
+/* СТРУКТУРА ОБУЧЕНИЯ + ТЁМНАЯ ПЛАШКА КОНТРОЛЯ ОТЧЁТНОСТИ. */
+.summary-analytics {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 448px;
+  gap: var(--space-24);
+}
+
+.program-row {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr) 56px;
+  align-items: center;
+  gap: var(--space-24);
+  min-height: var(--row-height);
+}
+
+.program-row__value {
+  font: var(--text-label);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ПОЛОСА ПРОГРЕССА: голубой на алюминиевой дорожке. */
+.program-progress {
+  width: 100%;
+  height: 8px;
+  background: var(--odk-canvas);
+  border: 0;
+  appearance: none;
+}
+
+.program-progress::-webkit-progress-bar {
+  background: var(--odk-canvas);
+}
+
+.program-progress::-webkit-progress-value {
+  background: var(--odk-accent);
+}
+
+.program-progress::-moz-progress-bar {
+  background: var(--odk-accent);
+}
+
+.learning-structure__note {
+  margin-top: var(--space-16);
+}
+
+.report-attention {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-24);
+  color: var(--odk-on-dark);
+  background: var(--odk-dark);
+}
+
+.report-attention__label {
+  font: var(--text-caption);
+  text-transform: uppercase;
+  color: var(--odk-on-dark-muted);
+}
+
+.report-attention__value {
+  margin-top: var(--space-8);
+  font: var(--text-number);
+}
+
+.report-attention__details {
+  margin-top: var(--space-8);
+}
+
+.report-attention__link {
+  align-self: flex-start;
+  margin-top: var(--space-16);
+  border-color: var(--odk-surface);
+}
+
+@media (max-width: 1200px) {
+  .summary-analytics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .program-row {
+    grid-template-columns: minmax(0, 1fr) 48px;
+    gap: var(--space-4) var(--space-16);
+    padding: var(--space-8) 0;
+  }
+
+  .program-row__label {
+    grid-column: 1 / -1;
+  }
+}

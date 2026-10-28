@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Контур развития · ОДК{% endblock %}</title>
+  {% for css in ['01-design-tokens.css','02-base.css','03-layout.css','04-components.css','05-data-quality.css','08-summary.css','09-training.css','10-students.css'] %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/' ~ css) }}">
+  {% endfor %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+  {% block scripts %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к содержимому</a>
+  <header class="app-header">
+    <a class="brand" href="{{ url_for('summary') }}" aria-label="ОДК - сводка"><img class="brand__image" src="{{ url_for('static',filename='images/odk-logo-full.png') }}" width="132" height="58" alt="ОДК"></a>
+    <div class="system-name"><p class="system-name__title">КОНТУР РАЗВИТИЯ</p><p class="system-name__subtitle">Обучение и кадровый потенциал ОДК</p></div>
+    <a class="button button--primary header-upload" href="{{ url_for('index') }}">Загрузить XLSX</a>
+  </header>
+  <div class="app-body">
+    <aside class="sidebar" aria-label="Навигация по контуру">
+      <p class="sidebar__caption">РАЗДЕЛЫ</p>
+      <nav aria-label="Основные разделы"><ul class="nav-list">
+      {% for key,endpoint,number,label in [('summary','summary','01','Сводка'),('training','training','02','Обучение'),('students','dashboards','03','Целевые студенты'),('quality','quality','04','Качество данных')] %}
+        <li><a class="nav-link" href="{{ url_for(endpoint) }}" {% if active == key %}aria-current="page"{% endif %}><span class="nav-link__index">{{ number }}</span><span>{{ label }}</span></a></li>
+      {% endfor %}
+      </ul></nav>
+      <section class="source-list" aria-labelledby="source-title"><h2 class="source-list__title" id="source-title">ИСТОЧНИКИ</h2><ul><li>Целевые студенты · F02A</li><li>Школа мастера · F01</li></ul><p class="source-list__note">Данные из загруженных Excel.<br>Показатели разных файлов не суммируются автоматически.</p></section>
+      <div class="sidebar-footer"><p>Локальное приложение</p><p>Исходники и расчёты на вашем компьютере</p></div>
+    </aside>
+    <main class="page-content" id="main">{% block content %}{% endblock %}</main>
+  </div>
+  {% block data %}{% endblock %}
+</body>
+</html>
