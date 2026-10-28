@@ -59,6 +59,7 @@ def current_reports():
     return [{"filename": r["filename"], "code": r["profile"].code,
                 "title": r["profile"].title, "demo": r.get("demo", False),
                 "students": r.get("students"), "chart": r.get("chart"),
+                "analytics": r.get("analytics"),
                 "sheets": r["sheets"], "warnings": r["warnings"]} for r in results]
 
 

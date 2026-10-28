@@ -1,52 +1,11 @@
-"""Чтение книг и первый полезный показатель для формы F01."""
+"""Чтение Excel-книг, определение формы и вызов обработчиков ETL."""
 
-from collections import defaultdict
 from io import BytesIO
-from numbers import Real
 
 from openpyxl import load_workbook
 
 from detector import PROFILE_BY_CODE, detect, normalize
-from student_report import student_report
-
-
-def _display(value: object) -> str:
-    if value is None:
-        return ""
-    text = str(value).strip().replace("\n", " ")
-    return text[:90] + ("…" if len(text) > 90 else "")
-
-
-def _f01_chart(workbook) -> tuple[list[str], list[float], list[str]]:
-    warnings = []
-    totals = defaultdict(float)
-    found_header = False
-    for sheet in workbook.worksheets:
-        month = trained = None
-        for row_number, row in enumerate(sheet.iter_rows(min_row=1, max_row=min(sheet.max_row, 30), values_only=True), 1):
-            names = [normalize(value) for value in row]
-            month = next((i for i, value in enumerate(names) if value == "месяц"), None)
-            trained = next((i for i, value in enumerate(names) if "фактически обученные" in value), None)
-            if month is None or trained is None:
-                continue
-            found_header = True
-            break
-        if month is None or trained is None:
-            continue
-        for row in sheet.iter_rows(min_row=row_number + 1, values_only=True):
-            if month >= len(row) or trained >= len(row):
-                continue
-            period = _display(row[month])
-            value = row[trained]
-            if not period or "итого" in normalize(period) or "всего" in normalize(period):
-                continue
-            if isinstance(value, Real) and not isinstance(value, bool):
-                totals[period] += float(value)
-    if not found_header:
-        warnings.append("Не найдены столбцы «Месяц» и «Фактически обученные».")
-    if found_header and not totals:
-        warnings.append("В столбце обученных нет заполненных чисел для графика.")
-    return list(totals), list(totals.values()), warnings
+from ETL import student_report, training_report
 
 
 def analyze_file(filename: str, content: bytes, selected_code: str = "") -> dict:
@@ -79,15 +38,14 @@ def analyze_file(filename: str, content: bytes, selected_code: str = "") -> dict
             "candidates": [(code, PROFILE_BY_CODE[code].title, points) for code, points in candidates if points],
             "sheets": previews,
             "chart": None,
+            "analytics": None,
             "warnings": [],
             "students": None,
             "demo": any("демо" in normalize(sheet.cell(1, 1).value).split() for sheet in workbook.worksheets),
         }
         if profile and profile.code == "F01":
-            labels, values, warnings = _f01_chart(workbook)
+            result["analytics"], result["chart"], warnings = training_report(workbook)
             result["warnings"].extend(warnings)
-            if labels:
-                result["chart"] = {"labels": labels, "values": values}
         elif profile and profile.code == "F02A":
             result["students"], warnings = student_report(workbook)
             result["warnings"].extend(warnings)

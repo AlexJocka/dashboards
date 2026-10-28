@@ -25,7 +25,7 @@ python -m unittest discover -s tests -v
 
 ## Почему `analyzer.py` и `reports/__init__.py` не переименованы
 
-- `analyzer.py` — общий модуль, на который уже ссылается `app.py`; он не относится исключительно к F01. Для интеграции отчёта F01 в нём нужен импорт `from reports.f01_otchet_po_obucheniyu_shpm import analyze_shpm` и вызов обработчика.
+- `analyzer.py` — общий модуль, на который уже ссылается `app.py`; он не относится исключительно к F01. Вызывает обработчики из `ETL.py`: ШПМ F01 и студентов F02A. Прежние простые таблицы F01 также поддерживаются. Старый путь импорта `reports.f01_otchet_po_obucheniyu_shpm` сохранён для совместимости.
 - `reports/__init__.py` — служебное имя Python для пакета.
 - `tests/test_f01_otchet_po_obucheniyu_shpm.py` — тесты конкретно этой формы.
 
